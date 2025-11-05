@@ -1,3 +1,7 @@
+# Proyecto hecho para el Módulo de Análisis de datos con Python del Certificado de Cienca de Datos en el 2023
+
+Este proyecto tiene cosntantes actualizaciones conforme se vaya requiriendo.
+
 # Análisis de Datos de Airbnb - Ciudad de México
 
 Este proyecto contiene un análisis completo de datos de Airbnb en la Ciudad de México utilizando Python y diversas librerías de ciencia de datos.
