@@ -296,7 +296,16 @@ Se incorporaron mejoras en la sección de Machine Learning para elevar el rendim
    - Se establecieron random_state en los modelos y en la partición de datos.
    - Se reutilizó X_filled (sin valores NaN) para evitar errores en entrenamiento y evaluación.
 
+5. Pipeline de producción completo
+   - Se empaquetó el preprocesamiento (SimpleImputer con fill_value=0) y el modelo HistGradientBoosting en un Pipeline sklearn.
+   - El pipeline acepta datos crudos con NaN y ejecuta todo el flujo automáticamente (imputación → predicción).
+   - Artefactos generados:
+     - `models/pipeline_hgb_cuauhtemoc.pkl`: Pipeline entrenado listo para producción
+     - `models/pipeline_metadata.json`: Metadata con features, hiperparámetros y métricas
+   - Uso: `pipeline.predict(X_nuevo)` sin necesidad de preprocesamiento manual.
+
 Notas:
 
 - Las métricas del modelo no lineal son significativamente superiores en este conjunto de datos. Se recomienda revisar posibles fugas de información en features si se desea mayor robustez, o validar con una partición temporal/espacial si aplica al caso de negocio.
+- El pipeline de producción está listo para integrarse en sistemas externos y garantiza reproducibilidad completa.
 
