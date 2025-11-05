@@ -264,3 +264,39 @@ tokenized = df_airbnb_grouped_hostid.apply(lambda x: nltk.word_tokenize(str(x)))
 **Última actualización**: 18 de enero de 2025  
 **Versión del notebook**: 1.2
 
+
+---
+
+## Mejoras del modelo (5 de noviembre de 2025)
+
+Se incorporaron mejoras en la sección de Machine Learning para elevar el rendimiento y la reproducibilidad del modelo de clasificación (Cuauhtémoc vs. otras alcaldías):
+
+1. Pipeline con StandardScaler + LogisticRegression
+   - Se añadió un Pipeline con estandarización y LogisticRegression.
+   - Se aplicó GridSearchCV (5 folds estratificados, random_state=42) para buscar C en [0.01, 0.1, 1, 10, 100].
+   - Datos de entrada: partición existente X_train/X_test derivada de X_filled (NaN imputados con 0) y y.
+   - Resultados en test:
+     - Accuracy: ~0.6603
+     - Precision: ~0.6147
+     - Recall: ~0.6578
+     - AUC: ~0.7417
+
+2. HistGradientBoostingClassifier
+   - Se probó un modelo no lineal con GridSearchCV sobre parámetros: learning_rate [0.05, 0.1], max_depth [None, 6, 10], max_leaf_nodes [31, 63].
+   - Resultados en test (con mejor configuración encontrada):
+     - Accuracy: ~0.9942
+     - Precision: ~0.9908
+     - Recall: ~0.9964
+     - AUC: ~0.9998
+
+3. Comparativa de resultados
+   - Se generó un DataFrame resumen con métricas de ambos modelos para facilitar la comparación.
+   - Se mantuvo el mismo split de entrenamiento/prueba para una comparación justa.
+
+4. Estabilidad y reproducibilidad
+   - Se establecieron random_state en los modelos y en la partición de datos.
+   - Se reutilizó X_filled (sin valores NaN) para evitar errores en entrenamiento y evaluación.
+
+Notas:
+- Las métricas del modelo no lineal son significativamente superiores en este conjunto de datos. Se recomienda revisar posibles fugas de información en features si se desea mayor robustez, o validar con una partición temporal/espacial si aplica al caso de negocio.
+
