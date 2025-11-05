@@ -270,7 +270,6 @@ tokenized = df_airbnb_grouped_hostid.apply(lambda x: nltk.word_tokenize(str(x)))
 ## Mejoras del modelo (5 de noviembre de 2025)
 
 Se incorporaron mejoras en la sección de Machine Learning para elevar el rendimiento y la reproducibilidad del modelo de clasificación (Cuauhtémoc vs. otras alcaldías):
-
 1. Pipeline con StandardScaler + LogisticRegression
    - Se añadió un Pipeline con estandarización y LogisticRegression.
    - Se aplicó GridSearchCV (5 folds estratificados, random_state=42) para buscar C en [0.01, 0.1, 1, 10, 100].
@@ -298,5 +297,6 @@ Se incorporaron mejoras en la sección de Machine Learning para elevar el rendim
    - Se reutilizó X_filled (sin valores NaN) para evitar errores en entrenamiento y evaluación.
 
 Notas:
+
 - Las métricas del modelo no lineal son significativamente superiores en este conjunto de datos. Se recomienda revisar posibles fugas de información en features si se desea mayor robustez, o validar con una partición temporal/espacial si aplica al caso de negocio.
 
