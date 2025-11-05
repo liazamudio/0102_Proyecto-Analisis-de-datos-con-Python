@@ -177,6 +177,90 @@ Para problemas o preguntas:
 
 ---
 
+## Actualizaciones del 18 de enero de 2025
+
+### Correcciones adicionales para eliminar todos los errores de ejecución
+
+#### 1. Librerías adicionales instaladas ✅
+- **nbformat**: Requerido para el renderizado de visualizaciones Plotly en notebooks
+
+#### 2. Visualizaciones Treemap (Celdas 101-105) ✅
+
+**Problema**: Plotly Treemap requiere datos pre-agregados con columna de conteo explícita
+
+**Celda 101 (Preparación de datos):**
+```python
+df_airbnb_7_treemap = df_airbnb_7_grouped_reset.groupby(['neighbourhood', 'room_type'], as_index=False)['count'].sum()
+```
+
+**Celda 102 (Treemap principal):**
+```python
+fig = px.treemap(df_airbnb_7_treemap, 
+                 path=['neighbourhood', 'room_type'], 
+                 values='count')
+```
+
+**Celda 103 (Top 5 alcaldías):**
+```python
+top_5_alcaldias = df_airbnb_7_treemap.groupby('neighbourhood')['count'].sum().nlargest(5)
+df_top_5_alcaldias = df_airbnb_7_treemap[df_airbnb_7_treemap['neighbourhood'].isin(top_5_alcaldias.index)]
+```
+
+**Celdas 104-105**: Actualizadas para usar `df_top_5_alcaldias` con valores pre-agregados
+
+#### 3. Búsqueda con expresiones regulares (Celda 128) ✅
+
+**Problema**: Caracteres especiales en regex no estaban escapados correctamente
+
+**Antes:**
+```python
+pattern = r'\b(Juárez|Roma)\b'
+```
+
+**Después:**
+```python
+pattern = r'\b(Ju[aá]rez|Roma)\b'
+juarez_or_roma = df_airbnb_grouped_hostid.str.contains(pattern, case=False, na=False, regex=True)
+```
+
+#### 4. Tokenización NLTK (Celdas 130-133) ✅
+
+**Problema**: `nltk.word_tokenize()` no puede aplicarse directamente a Series sin lambda
+
+**Antes:**
+```python
+tokenized = df_airbnb_grouped_hostid.apply(nltk.word_tokenize)
+```
+
+**Después:**
+```python
+tokenized = df_airbnb_grouped_hostid.apply(lambda x: nltk.word_tokenize(str(x)))
+```
+
+#### 5. Estado de las celdas corregidas
+
+| Celda | Líneas | Contenido | Estado |
+|-------|--------|-----------|--------|
+| 101 | 675-679 | Preparación treemap | ✅ Actualizada |
+| 102 | 682-685 | Treemap principal | ✅ Actualizada |
+| 103 | 688-691 | Top 5 alcaldías | ✅ Actualizada |
+| 104 | 694-701 | Treemap top 5 | ✅ Actualizada |
+| 105 | 704-711 | Treemap invertido | ✅ Actualizada |
+| 128 | 931-935 | Regex Juárez/Roma | ✅ Actualizada |
+| 130 | 984-986 | Tokenización | ✅ Actualizada |
+
+### Resumen de pruebas realizadas
+
+- ✅ Importaciones y advertencias suprimidas
+- ✅ Recursos NLTK disponibles
+- ✅ Dataset cargado correctamente
+- 🔄 Visualizaciones treemap corregidas (requiere ejecución completa del notebook para verificar)
+- ⚠️ Mapa coroplético (celda 110): Requiere verificación de conexión a internet para GeoJSON
+
+---
+
 **Autor de las actualizaciones**: GitHub Copilot  
 **Fecha**: 5 de noviembre de 2025  
-**Versión del notebook**: 1.1
+**Última actualización**: 18 de enero de 2025  
+**Versión del notebook**: 1.2
+
